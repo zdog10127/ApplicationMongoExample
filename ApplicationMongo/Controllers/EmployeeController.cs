@@ -27,29 +27,29 @@ namespace ApplicationMongo.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Employee em)
+        public JsonResult Post(Employee emp)
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("EmployeeAppCon"));
 
             int LastEmployeeId = dbClient.GetDatabase("testedb").GetCollection<Employee>("Employee").AsQueryable().Count();
-            em.EmployeeId = LastEmployeeId + 1;
+            emp.EmployeeId = LastEmployeeId + 1;
 
-            dbClient.GetDatabase("testedb").GetCollection<Employee>("Employee").InsertOne(em);
+            dbClient.GetDatabase("testedb").GetCollection<Employee>("Employee").InsertOne(emp);
 
             return new JsonResult("Adicionado com Sucesso");
         }
 
         [HttpPut]
-        public JsonResult Put(Employee em)
+        public JsonResult Put(Employee emp)
         {
             MongoClient dbClient = new MongoClient(_configuration.GetConnectionString("EmployeeAppCon"));
 
-            var filter = Builders<Employee>.Filter.Eq("EmployeeId", em.EmployeeId);
+            var filter = Builders<Employee>.Filter.Eq("EmployeeId", emp.EmployeeId);
 
-            var update = Builders<Employee>.Update.Set("EmployeeName", em.EmployeeName)
-                                                    .Set("Departament", em.Departament)
-                                                      .Set("DateOfJoining", em.DateOfJoining)
-                                                        .Set("PhotoFileName", em.PhotoFileName);
+            var update = Builders<Employee>.Update.Set("EmployeeName", emp.EmployeeName)
+                                                    .Set("Departament", emp.Departament)
+                                                      .Set("DateOfJoining", emp.DateOfJoining)
+                                                        .Set("PhotoFileName", emp.PhotoFileName);
 
             dbClient.GetDatabase("testedb").GetCollection<Employee>("Employee").UpdateOne(filter, update);
 
